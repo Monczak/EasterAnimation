@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bc58pxlaeilcc"]
+[gd_scene load_steps=24 format=3 uid="uid://bc58pxlaeilcc"]
 
 [ext_resource type="Texture2D" uid="uid://trav2ryycamv" path="res://graphics/art_Background.svg" id="1_14brh"]
 [ext_resource type="Script" path="res://src/Egg.gd" id="2_bjrl4"]
@@ -6,82 +6,193 @@
 [ext_resource type="Texture2D" uid="uid://7a1hwo4h75at" path="res://graphics/art_Table.svg" id="3_g5dfp"]
 [ext_resource type="Texture2D" uid="uid://wa54g2e8w5i4" path="res://graphics/art_Chick.svg" id="4_p6h54"]
 [ext_resource type="Texture2D" uid="uid://t8m86e8amu2" path="res://graphics/art_EggLowerHalf.svg" id="5_vpxa1"]
+[ext_resource type="Material" uid="uid://bhal3jusfnsn4" path="res://materials/Crack.tres" id="6_b5yf5"]
 [ext_resource type="Texture2D" uid="uid://d4aaqom51lbhh" path="res://graphics/art_EggUpperHalf.svg" id="6_ra872"]
+[ext_resource type="Texture2D" uid="uid://bfymybjuwqg1g" path="res://graphics/art_Crack.svg" id="6_t0kva"]
+[ext_resource type="AudioStream" uid="uid://b3vbo1y281uqu" path="res://sounds/EggImpact.ogg" id="7_cf0yc"]
+[ext_resource type="Texture2D" uid="uid://dxm7xsi25vgmx" path="res://graphics/CrackParticle.svg" id="8_b36h8"]
 [ext_resource type="Script" path="res://src/Camera.gd" id="8_uh8ud"]
+[ext_resource type="Texture2D" uid="uid://sb3rv4n6xjfv" path="res://graphics/HappyEasterText.svg" id="11_la7i6"]
+[ext_resource type="AudioStream" uid="uid://fxfdi6tukw4p" path="res://sounds/EggSmallCrack.ogg" id="11_lo11h"]
+[ext_resource type="AudioStream" uid="uid://11iuu0scytig" path="res://sounds/EggCrack.ogg" id="11_o48xc"]
+[ext_resource type="AudioStream" uid="uid://ciwnh0j3l2ag2" path="res://sounds/Chick.ogg" id="12_1dp47"]
+[ext_resource type="Script" path="res://src/HappyEasterText.gd" id="12_ajdam"]
+[ext_resource type="Script" path="res://src/AnimationSequence.gd" id="14_g6aie"]
+[ext_resource type="Texture2D" uid="uid://d0hrs5jq4i2qw" path="res://graphics/tutorial.svg" id="16_muloy"]
+[ext_resource type="Script" path="res://src/Tutorial.gd" id="17_0tmi2"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_lbqyv"]
 friction = 0.36
-bounce = 0.35
+bounce = 0.51
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wdr04"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(50, 1, 1)
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, -1, 0)
+spread = 78.086
+initial_velocity_min = 140.33
+initial_velocity_max = 289.87
+angular_velocity_min = -83.61
+angular_velocity_max = 55.38
+gravity = Vector3(0, 600, 0)
+scale_min = 0.1
+scale_max = 0.15
+collision_use_scale = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v3lwe"]
 size = Vector2(192, 10.2857)
 
 [node name="Root" type="Node2D"]
 
-[node name="Scene" type="Node2D" parent="."]
+[node name="AnimationSequence" type="Node2D" parent="."]
+script = ExtResource("14_g6aie")
+
+[node name="Scene" type="Node2D" parent="AnimationSequence"]
 scale = Vector2(0.875, 0.875)
 
-[node name="ArtBackground" type="Sprite2D" parent="Scene"]
+[node name="Background" type="Sprite2D" parent="AnimationSequence/Scene"]
 position = Vector2(0, -1)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_14brh")
 
-[node name="Egg" type="Node2D" parent="Scene"]
+[node name="Egg" type="Node2D" parent="AnimationSequence/Scene"]
+position = Vector2(0, 49.1428)
 script = ExtResource("2_bjrl4")
-break_force = Vector2(100, -500)
+break_force = Vector2(150, -700)
 break_torque = 2000.0
-chick_movement_delta = Vector2(0, -25)
+chick_movement_delta = Vector2(0, -69)
 chick_movement_duration = 0.6
+shake_speed = 12.0
 
-[node name="ArtChick" type="Sprite2D" parent="Scene/Egg"]
-position = Vector2(-3.42857, 12.5714)
+[node name="ArtChick" type="Sprite2D" parent="AnimationSequence/Scene/Egg"]
+position = Vector2(-3.42857, -34.2858)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("4_p6h54")
 
-[node name="ArtEggLowerHalf" type="Sprite2D" parent="Scene/Egg"]
-position = Vector2(-2, 20)
+[node name="ArtEggLowerHalf" type="Sprite2D" parent="AnimationSequence/Scene/Egg"]
+position = Vector2(-2, -26.8572)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_vpxa1")
 
-[node name="UpperHalf" type="RigidBody2D" parent="Scene/Egg"]
-position = Vector2(-2.28571, -26.2857)
+[node name="UpperHalf" type="RigidBody2D" parent="AnimationSequence/Scene/Egg"]
+position = Vector2(-2.28571, -73.1428)
+collision_mask = 2
 physics_material_override = SubResource("PhysicsMaterial_lbqyv")
 freeze = true
+contact_monitor = true
+max_contacts_reported = 1
 
-[node name="ArtEggUpperHalf" type="Sprite2D" parent="Scene/Egg/UpperHalf"]
+[node name="ArtEggUpperHalf" type="Sprite2D" parent="AnimationSequence/Scene/Egg/UpperHalf"]
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("6_ra872")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Scene/Egg/UpperHalf"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AnimationSequence/Scene/Egg/UpperHalf"]
 polygon = PackedVector2Array(-40.92, 27.51, -29.7143, 18.2857, -19.4286, 27.4286, -4.57143, 17.1429, 0, 26.2857, 10.2857, 17.1429, 20.5714, 26.2857, 35.4286, 17.1429, 40.49, 26.64, 40, 18.2857, 37.7143, 11.4286, 34.605, 3.805, 30.92, -4.02, 26.2857, -11.4286, 20.105, -18.89, 13.7143, -24, 7.105, -26.445, 1.14286, -27.4286, -5.68, -27.06, -11.4286, -25.1429, -16.085, -21.495, -22.8571, -16, -29.26, -7.215, -34.2857, 1.14286, -36.45, 9.66)
 
-[node name="Table" type="StaticBody2D" parent="Scene"]
-position = Vector2(-3.42857, 209.143)
+[node name="Area2D" type="Area2D" parent="AnimationSequence/Scene/Egg/UpperHalf"]
+collision_mask = 2
 
-[node name="ArtTable" type="Sprite2D" parent="Scene/Table"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AnimationSequence/Scene/Egg/UpperHalf/Area2D"]
+scale = Vector2(1.2, 1.2)
+polygon = PackedVector2Array(-40.92, 27.51, -29.7143, 18.2857, -19.4286, 27.4286, -4.57143, 17.1429, 0, 26.2857, 10.2857, 17.1429, 20.5714, 26.2857, 35.4286, 17.1429, 40.49, 26.64, 40, 18.2857, 37.7143, 11.4286, 34.605, 3.805, 30.92, -4.02, 26.2857, -11.4286, 20.105, -18.89, 13.7143, -24, 7.105, -26.445, 1.14286, -27.4286, -5.68, -27.06, -11.4286, -25.1429, -16.085, -21.495, -22.8571, -16, -29.26, -7.215, -34.2857, 1.14286, -36.45, 9.66)
+
+[node name="BounceAudio" type="AudioStreamPlayer2D" parent="AnimationSequence/Scene/Egg/UpperHalf"]
+stream = ExtResource("7_cf0yc")
+
+[node name="Crack" type="Sprite2D" parent="AnimationSequence/Scene/Egg"]
+material = ExtResource("6_b5yf5")
+position = Vector2(-2.28572, -50.2857)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("6_t0kva")
+
+[node name="CrackParticles" type="GPUParticles2D" parent="AnimationSequence/Scene/Egg"]
+position = Vector2(0, -46.8571)
+emitting = false
+amount = 10
+process_material = SubResource("ParticleProcessMaterial_wdr04")
+texture = ExtResource("8_b36h8")
+lifetime = 10.0
+one_shot = true
+explosiveness = 1.0
+
+[node name="CrackAudio" type="AudioStreamPlayer2D" parent="AnimationSequence/Scene/Egg"]
+stream = ExtResource("11_lo11h")
+
+[node name="ExplodeAudio" type="AudioStreamPlayer2D" parent="AnimationSequence/Scene/Egg"]
+stream = ExtResource("11_o48xc")
+
+[node name="ChickAudio" type="AudioStreamPlayer2D" parent="AnimationSequence/Scene/Egg"]
+stream = ExtResource("12_1dp47")
+volume_db = -9.109
+
+[node name="Table" type="StaticBody2D" parent="AnimationSequence/Scene"]
+position = Vector2(-3.42857, 209.143)
+collision_layer = 2
+
+[node name="ArtTable" type="Sprite2D" parent="AnimationSequence/Scene/Table"]
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_g5dfp")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Scene/Table"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AnimationSequence/Scene/Table"]
 polygon = PackedVector2Array(-309.714, -142.857, -253.714, -145.143, -123.429, -147.429, 5.71428, -147.429, 186.286, -147.429, 314.286, -142.857, 322.286, -136, 323.429, -123.429, 320, -110.857, 315.429, -104, 267.429, -101.714, 3.42857, -98.2857, -312, -102.857, -322.286, -108.571, -324.571, -123.429, -318.857, -140.571)
 
-[node name="Plate" type="StaticBody2D" parent="Scene"]
+[node name="Plate" type="StaticBody2D" parent="AnimationSequence/Scene"]
 position = Vector2(0, 56)
+collision_mask = 2
 
-[node name="ArtPlate" type="Sprite2D" parent="Scene/Plate"]
+[node name="ArtPlate" type="Sprite2D" parent="AnimationSequence/Scene/Plate"]
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_gi4ei")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Scene/Plate"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimationSequence/Scene/Plate"]
 position = Vector2(1.14286, 0.571434)
 shape = SubResource("RectangleShape2D_v3lwe")
 
-[node name="Camera" type="Node2D" parent="."]
+[node name="HappyEasterText" type="Sprite2D" parent="AnimationSequence/Scene"]
+position = Vector2(-8, -233.143)
+scale = Vector2(1.14286, 1.14286)
+texture = ExtResource("11_la7i6")
+script = ExtResource("12_ajdam")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="AnimationSequence/Scene"]
+
+[node name="Control" type="Control" parent="AnimationSequence/Scene/CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tutorial" type="TextureRect" parent="AnimationSequence/Scene/CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -224.0
+offset_right = 150.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("16_muloy")
+expand_mode = 1
+stretch_mode = 4
+script = ExtResource("17_0tmi2")
+
+[node name="Timer" type="Timer" parent="AnimationSequence/Scene/CanvasLayer/Control/Tutorial"]
+
+[node name="Camera" type="Node2D" parent="AnimationSequence"]
 script = ExtResource("8_uh8ud")
 shake_speed = 10.0
 shake_delta = Vector2(20, 20)
-shake_tremor_power = 1.0
-shake_tremor_duration = 2.0
 
-[node name="Camera2D" type="Camera2D" parent="Camera"]
+[node name="Camera2D" type="Camera2D" parent="AnimationSequence/Camera"]
 zoom = Vector2(1.1, 1.1)

@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bhal3jusfnsn4"]
+
+[ext_resource type="Shader" uid="uid://bjfm0ckirqumq" path="res://materials/CrackShader.tres" id="1_qaht8"]
+
+[resource]
+shader = ExtResource("1_qaht8")
+shader_parameter/Reveal = 0.0
