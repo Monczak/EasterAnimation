@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bc58pxlaeilcc"]
+[gd_scene load_steps=25 format=3 uid="uid://bc58pxlaeilcc"]
 
 [ext_resource type="Texture2D" uid="uid://trav2ryycamv" path="res://graphics/art_Background.svg" id="1_14brh"]
 [ext_resource type="Script" path="res://src/Egg.gd" id="2_bjrl4"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://src/AnimationSequence.gd" id="14_g6aie"]
 [ext_resource type="Texture2D" uid="uid://d0hrs5jq4i2qw" path="res://graphics/tutorial.svg" id="16_muloy"]
 [ext_resource type="Script" path="res://src/Tutorial.gd" id="17_0tmi2"]
+[ext_resource type="AudioStream" uid="uid://butpixfthrb3a" path="res://sounds/Final.ogg" id="18_4ki4n"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_lbqyv"]
 friction = 0.36
@@ -156,6 +157,9 @@ position = Vector2(-8, -233.143)
 scale = Vector2(1.14286, 1.14286)
 texture = ExtResource("11_la7i6")
 script = ExtResource("12_ajdam")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="AnimationSequence/Scene/HappyEasterText"]
+stream = ExtResource("18_4ki4n")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="AnimationSequence/Scene"]
 

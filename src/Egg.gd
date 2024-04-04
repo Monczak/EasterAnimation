@@ -49,6 +49,9 @@ func break_open() -> void:
     upper_half.apply_torque_impulse(break_torque)
     
     explode_audio.play()
+    
+    await get_tree().create_timer(0.7).timeout
+    chick_audio.play()
 
 
 func _pop_chick_up() -> void:
